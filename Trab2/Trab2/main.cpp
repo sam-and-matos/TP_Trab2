@@ -11,70 +11,65 @@ int main(){
 	int choice,linha, coluna, menuLinha, menuColuna, tam_string, posMenu, proxMenu, highlight = 0;
 	vector<string> choices= { "Pesquisar Evento","Cadastrar", "Entrar" };
 	ControladoraApresentacaoEventos CtrApreEve;
-
+	ControladoraApresentacaoAutenticacao CtrApreAut;
+	ControladoraApresentacaoUsuarios CtrApreUsu;
+	ControladoraApresentacaoVendas CtrApreVen;
+	CPF cpf;
+	Senha senha;
+	string aux;
 
 	initscr();
 	noecho();
 
-	getmaxyx(stdscr, linha, coluna);
-	keypad(stdscr, true);
-
-	while (true)
-	{
-		for (int i = 0; i < 3; i++) {
-			if (i == highlight)
-				wattron(stdscr, WA_STANDOUT);
-			tam_string = strlen(choices.at(i).c_str());
-			mvwprintw(stdscr, (linha / 2) + (i - 1), (coluna - tam_string) / 2, choices[i].c_str());
-			wattroff(stdscr, WA_STANDOUT);
-		}
-
-		choice = wgetch(stdscr);
-		
-		switch (choice)
-		{
-		case KEY_UP:
-			highlight--;
-			if (highlight == -1)
-				highlight = 0;
-			break;
-		case KEY_DOWN:
-			highlight++;
-			if (highlight == 3)
-				highlight = 2;
-			break;
-		default:
-			break;
-		}
-
-		if (choice == 10) {
-			break;
-		}
+	for(auto it = choices.begin(); it != choices.end(); i++){
+		cout << "Escolha uma das opcoes a seguir:" << endl;
+		cout << "(%d)" << (highlight + 1) << choices.at(highlight);
+		highlight++;
 	}
-	clear();
-	switch (highlight)
+	cin << choice;
+
+	switch(choice)
 	{
-	case 0:
-		tam_string = strlen(choices.at(highlight).c_str());
-		mvwprintw(stdscr, 0 ,(coluna - tam_string)/2, choices.at(highlight).c_str());
-		wrefresh(stdscr);
+	case 1:
 		CtrApreEve.executar();
 		break;
-	case 1:
-		tam_string = strlen(choices.at(highlight).c_str());
-		mvwprintw(stdscr, 0, (coluna - tam_string) / 2, choices.at(highlight).c_str());
-		wrefresh(stdscr);
-		break;
 	case 2:
-		tam_string = strlen(choices.at(highlight).c_str());
-		mvwprintw(stdscr, 0, (coluna - tam_string) / 2, choices.at(highlight).c_str());
-		wrefresh(stdscr);
+		CtrApreUsu.executar();
+		break;
+	case 3:
+		while (true)
+		{
+			cout << "Digite o CPF: ";
+			cin >> aux;
+			try
+			{
+				cpf.setCPF(aux);
+			}
+			catch (invalid_argument exp)
+			{
+				cout << endl << exp.what() << endl;
+			}
+			break;
+		}
+		while (true)
+		{
+			cout << "Digite a senha: ";
+			cin >> aux;
+			try
+			{
+				senha.setSenha(aux);
+			}
+			catch (invalid_argument exp)
+			{
+				cout << endl << exp.what() << endl;
+			}
+			break;
+		}
 		break;
 	default:
 		break;
 	}
 
-	getch();
-
+	endwin();
 	return 0;
 }

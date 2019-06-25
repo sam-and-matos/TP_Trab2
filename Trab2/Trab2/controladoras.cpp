@@ -1,6 +1,5 @@
 #include "controladoras.h"
 #include <iostream>
-#include <string.h>
 
 
 using namespace std;
@@ -8,13 +7,13 @@ using namespace std;
 void ControladoraSQL::conectar() throw(ErroBanco) {
 	rc = sqlite3_open(nm_DB, &db);
 	if (rc != SQLITE_OK)
-		throw ErroBanco("Erro na conexão com o banco de dados");
+		throw ErroBanco("Erro na conexao com o banco de dados");
 }
 
 void ControladoraSQL::desconectar() throw(ErroBanco){
 	rc = sqlite3_close(db);
 	if (rc != SQLITE_OK)
-		throw ErroBanco("Erro na desconexão com o banco de dados");
+		throw ErroBanco("Erro na desconexao com o banco de dados");
 }
 
 void ControladoraSQL::executar() throw (ErroBanco) {
@@ -54,7 +53,7 @@ bool ControladoraServicoAutenticacao::autenticar(CPF cpf, Senha senha) throw (Er
 	CtrSQL.executar();
 
 	if (CtrSQL.listaResultado.empty()) {
-		throw ErroBanco("Usuário não cadastrado.");
+		throw ErroBanco("Usuario nao cadastrado.");
 		return false;
 	}
 	else
@@ -81,7 +80,7 @@ bool ControladoraServicoUsuario::cadastrar(CPF cpf, Senha senha, CartaoDeCredito
 	CtrSQL.executar();
 	
 	if (!CtrSQL.listaResultado.empty()) {
-		throw ErroBanco("Cartão já cadastrado.");
+		throw ErroBanco("Cartao ja cadastrado.");
 		return false;
 	}
 	else {
@@ -116,7 +115,7 @@ bool ControladoraServicoUsuario::excluir(CPF cpf) throw(ErroBanco) {
 	CtrSQL.executar();
 
 	if (CtrSQL.listaResultado.empty()) {
-		throw ErroBanco("Usuario não cadastrado.");
+		throw ErroBanco("Usuario nao cadastrado.");
 		return false;
 	}
 	else {
@@ -154,7 +153,7 @@ bool ControladoraServicoEvento::cadatrar(CPF cpf, Evento evento) throw(ErroBanco
 	CtrSQL.executar();
 
 	if (!CtrSQL.listaResultado.empty()) {
-		throw ErroBanco("Evento já cadastrado.");
+		throw ErroBanco("Evento ja cadastrado.");
 		return false;
 	}
 	else {
@@ -171,6 +170,75 @@ bool ControladoraServicoEvento::cadatrar(CPF cpf, Evento evento) throw(ErroBanco
 		CtrSQL.executar();
 	}
 	return true;
+}
+
+list<Apresentacao> ControladoraServicoEvento::apresentacoes(Evento evento) throw(ErroBanco){
+	ControladoraSQL CtrSQL;
+	CtrSQL.listaResultado.clear();
+	string cmd;
+	CodigoEvento codigo;
+	list<Apresentacao> lista;
+	Apresentacao apre;
+	CodigoApresentacao codigo; 
+	Data data; 
+	Horario horario; 
+	Preco preco; 
+	NumeroSala sala; 
+	Disponibilidade disponibilidade;
+	int colunas = 0;
+
+	codigo = evento.getCodigoEvento();
+
+	cmd = "SELECT CODIGO, DATA, HORARIO, PRECO, SALA, DISPONIBILIDADE FROM APRESENTACOES WHERE EVENTO = ";
+	cmd += codigo.getCodigoEvento();
+
+	CtrSQL.comandoSQL = cmd;
+	CtrSQL.executar();
+
+	for (auto it = listaResultado.begin(); it != listaResultado.end(); it++){
+		if (colunas == 0){
+			codigo.setCodigoApresentacao(listaResultado.front().getValorColuna());
+			i++;
+			listaResultado.pop_front();
+		}
+		if (colunas == 1){
+			data.setData(listaResultado.front().getValorColuna());
+			i++;
+			listaResultado.pop_front();
+		}
+		if (colunas == 2){
+			horario.setHorario(listaResultado.front().getValorColuna());
+			i++;
+			listaResultado.pop_front();
+		}
+		if (colunas == 3){
+			preco.setPreco(listaResultado.front().getValorColuna());
+			i++;
+			listaResultado.pop_front();
+		}
+		if (colunas == 4){
+			sala.setNumero(stoi(listaResultado.front().getValorColuna()));
+			i++;
+			listaResultado.pop_front();
+		}
+		if (colunas == 5){
+			disponibilidade.setDisponibilidade(stoi(listaResultado.front().getValorColuna()));
+			i++;
+			listaResultado.pop_front();
+		}
+		if (colunas > 5){
+			apre.setCodigoApresentacao(codigo);
+			apre.setData(data);
+			apre.setHorario(horario);
+			apre.setPreco(preco);
+			apre.setNumeroSala(sala);
+			apre.setDisponibilidade(disponibilidade);
+
+			lista.emplace_front(apre);
+			colunas = 0;
+		}
+	}
+	return lista;
 }
 
 Evento ControladoraServicoEvento::pesquisar(CodigoEvento codigo) throw(ErroBanco) {
@@ -294,7 +362,7 @@ bool ControladoraServicoEvento::alterar(Evento evento, CPF cpf) throw(ErroBanco)
 	CtrSQL.executar();
 
 	if (CtrSQL.listaResultado.empty()) {
-		throw ErroBanco("Evento não cadastrado.");
+		throw ErroBanco("Evento nao cadastrado.");
 		return false;
 	}
 	else {
@@ -339,7 +407,7 @@ bool ControladoraServicoEvento::excluir(Evento evento, CPF cpf) throw(ErroBanco)
 	CtrSQL.executar();
 
 	if (CtrSQL.listaResultado.empty()) {
-		throw ErroBanco("Evento não cadastrado");
+		throw ErroBanco("Evento nao cadastrado");
 		return false;
 	}
 	else {
@@ -350,7 +418,7 @@ bool ControladoraServicoEvento::excluir(Evento evento, CPF cpf) throw(ErroBanco)
 		CtrSQL.executar();
 		for (auto it = CtrSQL.listaResultado.begin(); it != CtrSQL.listaResultado.end(); it++) {
 			if (cpf.getCPF() != CtrSQL.listaResultado.front().getValorColuna())
-				throw ErroBanco("Evento não relacionado a esse CPF.");
+				throw ErroBanco("Evento nï¿½o relacionado a esse CPF.");
 			else
 			CtrSQL.listaResultado.pop_front();
 		}
@@ -367,6 +435,7 @@ bool ControladoraServicoEvento::excluir(Evento evento, CPF cpf) throw(ErroBanco)
 
 list<ElementoResultado> ControladoraServicoVendas::vendas(Evento evto)  throw(ErroBanco){
 	ControladoraSQL CtrSQL;
+	CtrSQL.listaResultado.clear();
 	string cmd;
 	list<ElementoResultado> resultado;
 	ElementoResultado vendas;
@@ -627,7 +696,7 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 	{
 		for (int i = 0; i < choices.size(); i++)
 			cout << "(%d)" << (i + 1) << choices.at(i) << endl;
-		cout << "Digite a opção desejada: ";
+		cout << "Digite a opcao desejada: ";
 		cin >> choice;
 		switch (choice)
 		{
@@ -1089,8 +1158,13 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 void ControladoraApresentacaoVendas::executar(Evento evento) throw(invalid_argument) {
 	ControladoraServicoVendas CtrServ;
 	list<ElementoResultado> vendasRes;
-
+	int i = 0;
 	vendasRes = CtrServ.vendas(evento);
+
+	for(auto it = vendasRes.begin(); it != vendasRes.end(); it++){
+		cout << vendasRes.front().getNomeColuna() << ": ";
+		cout << vendasRes.front().getValorColuna() << endl;
+	}
 }
 
 void ControladoraApresentacaoVendas::executar() throw(invalid_argument) {
@@ -1100,12 +1174,23 @@ void ControladoraApresentacaoVendas::executar() throw(invalid_argument) {
 	string auxStr;
 	CodigoEvento codigo;
 	Evento evento;
+	list<Apresentacao> apresentacoes;
 
 	while (true)
 	{
 		cout << endl << "Digite o codigo do evento que deseja comprar o ingresso: " << endl;
 		cin >> aux;
 		auxStr = aux;
+
+		try
+		{
+			codigo.setCodigoEvento(aux);
+		}
+		catch (invalid_argument exp)
+		{
+			cout << exp.what() << endl;
+		}
+
 		try
 		{
 			evento = CtrSerEve.pesquisar(codigo);
@@ -1114,5 +1199,17 @@ void ControladoraApresentacaoVendas::executar() throw(invalid_argument) {
 		{
 			cout << exp.what() << endl;
 		}
+		
+		try
+		{
+			apresentacoes = CtrSerEve.apresentacao(evento);
+		}
+		catch (ErroBanco exp)
+		{
+			cout << exp.what() << endl;
+		}
+
+		break;
 	}
+
 }

@@ -66,6 +66,7 @@ public:
 
 class InterfaceServicoEvento {
 public:
+	virtual list<Apresentacao> apresentacoes(Evento) throw (ErroBanco) = 0;
 	virtual Evento pesquisar(CodigoEvento) throw(ErroBanco) = 0;
 	virtual bool pesquisar(NomeEvento) throw(ErroBanco) = 0;
 	virtual bool pesquisar(CodigoEvento, CPF) throw(ErroBanco) = 0;

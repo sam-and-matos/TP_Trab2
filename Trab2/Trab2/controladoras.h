@@ -42,6 +42,7 @@ public:
 
 class ControladoraServicoEvento :public InterfaceServicoEvento{
 public:
+	list<Apresentacao> apresentacoes(Evento) throw (ErroBanco);
 	Evento pesquisar(CodigoEvento) throw (ErroBanco);
 	bool pesquisar(NomeEvento) throw (ErroBanco);
 	bool pesquisar(CodigoEvento,CPF) throw (ErroBanco);
