@@ -36,7 +36,7 @@ int ControladoraSQL::callback(void* NotUsed, int argc, char** valorColuna, char*
 	for (i = 0; i < argc; i++) {
 		elemento.setNomeColuna(nomeColuna[i]);
 		elemento.setValorColuna(valorColuna[i] ? valorColuna[i] : "NULL");
-		listaResultado.emplace_front(listaResultado.begin(),elemento);
+		listaResultado.emplace_front(elemento);
 	}
 	return 0;
 }
@@ -179,13 +179,13 @@ list<Apresentacao> ControladoraServicoEvento::apresentacoes(Evento evento) throw
 	CodigoEvento codigo;
 	list<Apresentacao> lista;
 	Apresentacao apre;
-	CodigoApresentacao codigo; 
+	CodigoApresentacao codigoApre; 
 	Data data; 
 	Horario horario; 
 	Preco preco; 
 	NumeroSala sala; 
 	Disponibilidade disponibilidade;
-	int colunas = 0;
+	int colunas = 0, i = 0;
 
 	codigo = evento.getCodigoEvento();
 
@@ -195,39 +195,39 @@ list<Apresentacao> ControladoraServicoEvento::apresentacoes(Evento evento) throw
 	CtrSQL.comandoSQL = cmd;
 	CtrSQL.executar();
 
-	for (auto it = listaResultado.begin(); it != listaResultado.end(); it++){
+	for (auto it = CtrSQL.listaResultado.begin(); it != CtrSQL.listaResultado.end(); it++){
 		if (colunas == 0){
-			codigo.setCodigoApresentacao(listaResultado.front().getValorColuna());
+			codigoApre.setCodigoApresentacao(CtrSQL.listaResultado.front().getValorColuna());
 			i++;
-			listaResultado.pop_front();
+			CtrSQL.listaResultado.pop_front();
 		}
 		if (colunas == 1){
-			data.setData(listaResultado.front().getValorColuna());
+			data.setData(CtrSQL.listaResultado.front().getValorColuna());
 			i++;
-			listaResultado.pop_front();
+			CtrSQL.listaResultado.pop_front();
 		}
 		if (colunas == 2){
-			horario.setHorario(listaResultado.front().getValorColuna());
+			horario.setHorario(CtrSQL.listaResultado.front().getValorColuna());
 			i++;
-			listaResultado.pop_front();
+			CtrSQL.listaResultado.pop_front();
 		}
 		if (colunas == 3){
-			preco.setPreco(listaResultado.front().getValorColuna());
+			preco.setPreco(CtrSQL.listaResultado.front().getValorColuna());
 			i++;
-			listaResultado.pop_front();
+			CtrSQL.listaResultado.pop_front();
 		}
 		if (colunas == 4){
-			sala.setNumero(stoi(listaResultado.front().getValorColuna()));
+			sala.setNumero(stoi(CtrSQL.listaResultado.front().getValorColuna()));
 			i++;
-			listaResultado.pop_front();
+			CtrSQL.listaResultado.pop_front();
 		}
 		if (colunas == 5){
-			disponibilidade.setDisponibilidade(stoi(listaResultado.front().getValorColuna()));
+			disponibilidade.setDisponibilidade(stoi(CtrSQL.listaResultado.front().getValorColuna()));
 			i++;
-			listaResultado.pop_front();
+			CtrSQL.listaResultado.pop_front();
 		}
 		if (colunas > 5){
-			apre.setCodigoApresentacao(codigo);
+			apre.setCodigoApresentacao(codigoApre);
 			apre.setData(data);
 			apre.setHorario(horario);
 			apre.setPreco(preco);
@@ -290,12 +290,12 @@ Evento ControladoraServicoEvento::pesquisar(CodigoEvento codigo) throw(ErroBanco
 		i++;
 	}
 
-	evnt.setCodigoEvento = codigo;
-	evnt.setNomeEvento = nome;
-	evnt.setCidade = cidade;
-	evnt.setClasseEvento = classe;
-	evnt.setEstado = estado;
-	evnt.setFaixaEtaria = faixa;
+	evnt.setCodigoEvento(codigo);
+	evnt.setNomeEvento(nome);
+	evnt.setCidade(cidade);
+	evnt.setClasseEvento(classe);
+	evnt.setEstado(estado);
+	evnt.setFaixaEtaria(faixa);
 
 
 	return evnt;
@@ -514,7 +514,7 @@ void ControladoraApresentacaoUsuario::executar() throw(invalid_argument) {
 	while (true)
 	{
 		if (contr > 5)
-			clear();
+			system("CLS");
 		cout << endl << "Digite o Numero do Cartao: " << endl;
 		cin >> aux;
 		auxStr = aux;
@@ -532,7 +532,7 @@ void ControladoraApresentacaoUsuario::executar() throw(invalid_argument) {
 	while (true)
 	{
 		if (contr > 5)
-			clear();
+			system("CLS");
 		cout << endl << "Digite a data de validade: " << endl;
 		cin >> aux;
 		auxStr = aux;
@@ -550,7 +550,7 @@ void ControladoraApresentacaoUsuario::executar() throw(invalid_argument) {
 	while (true)
 	{
 		if (contr > 5)
-			clear();
+			system("CLS");
 		cout << endl << "Digite o codigo de seguranca: " << endl;
 		cin >> aux;
 		auxStr = aux;
@@ -568,7 +568,7 @@ void ControladoraApresentacaoUsuario::executar() throw(invalid_argument) {
 	while (true)
 	{
 		if (contr > 5)
-			clear();
+			system("CLS");
 		cout << endl << "Digite o cpf: " << endl;
 		cin >> aux;
 		auxStr = aux;
@@ -586,7 +586,7 @@ void ControladoraApresentacaoUsuario::executar() throw(invalid_argument) {
 	while (true)
 	{
 		if (contr > 5)
-			clear();
+			system("CLS");
 		cout << endl << "Digite a senha: " << endl;
 		cin >> aux;
 		auxStr = aux;
@@ -648,7 +648,7 @@ void ControladoraApresentacaoEventos::executar() throw(invalid_argument) {
 		while (true)
 		{
 			if (contr > 5)
-				clear();
+				system("CLS");
 			cout << "Digite o nome do evento que deseja procurar: ";
 			cin >> aux;
 			aux_str = aux;
@@ -678,7 +678,7 @@ void ControladoraApresentacaoEventos::executar() throw(invalid_argument) {
 void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) {
 	ControladoraServicoEvento CtrServEve;
 	ControladoraServicoVendas CtrSerVen;
-	int linha, coluna, highlight = 0, tam_str, choice, choice2;
+	int linha, coluna, highlight = 0, tam_str, choice, choice2, index = 0;
 	Evento evento;
 	CodigoEvento codigo;
 	NomeEvento nome;
@@ -718,7 +718,7 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 						cout << exp.what() << endl;
 					}
 					evento.setCodigoEvento(codigo);
-					clear();
+					system("CLS");
 					break;
 				}
 				while (true)
@@ -735,7 +735,7 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 						cout << exp.what() << endl;
 					}
 					evento.setNomeEvento(nome);
-					clear();
+					system("CLS");
 					break;
 				}
 				while (true)
@@ -752,7 +752,7 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 						cout << exp.what() << endl;
 					}
 					evento.setCidade(cidade);
-					clear();
+					system("CLS");
 					break;
 				}
 				while (true)
@@ -769,7 +769,7 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 						cout << exp.what() << endl;
 					}
 					evento.setEstado(estado);
-					clear();
+					system("CLS");
 					break;
 				}
 				while (true)
@@ -786,7 +786,7 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 						cout << exp.what() << endl;
 					}
 					evento.setClasseEvento(classe);
-					clear();
+					system("CLS");
 					break;
 				}
 				while (true)
@@ -803,14 +803,14 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 						cout << exp.what() << endl;
 					}
 					evento.setFaixaEtaria(faixa);
-					clear();
+					system("CLS");
 					break;
 				}
 				break;
 			}
 			break;
 		case 2:
-			clear();
+			system("CLS");
 			highlight = 0;
 			
 			while (true)
@@ -818,7 +818,7 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 				while (true)
 				{
 					if (highlight > 5)
-						clear();
+						system("CLS");
 					cout << "Digite o codigo do evento que deseja alterar: ";
 					cin >> aux;
 					aux_str = aux;
@@ -850,13 +850,13 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 			switch (choice2)
 			{
 			case 1:
-				clear();
+				system("CLS");
 				while (true)
 				{
 					while (true)
 					{
 						if (highlight > 5)
-							clear();
+							system("CLS");
 						cout << "Digite novo codigo do evento: ";
 						cin >> aux;
 						aux_str = aux;
@@ -887,13 +887,13 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 				}
 				break;
 			case 2:
-				clear();
+				system("CLS");
 				while (true)
 				{
 					while (true)
 					{
 						if (highlight > 5)
-							clear();
+							system("CLS");
 						cout << "Digite novo nome do evento: ";
 						cin >> aux;
 						aux_str = aux;
@@ -921,13 +921,13 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 				}
 				break;
 			case 3:
-				clear();
+				system("CLS");
 				while (true)
 				{
 					while (true)
 					{
 						if (highlight > 5)
-							clear();
+							system("CLS");
 						cout << "Digite nova cidade do evento: ";
 						cin >> aux;
 						aux_str = aux;
@@ -955,13 +955,13 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 				}
 				break;
 			case 4:
-				clear();
+				system("CLS");
 				while (true)
 				{
 					while (true)
 					{
 						if (highlight > 5)
-							clear();
+							system("CLS");
 						cout << "Digite novo estado do evento: ";
 						cin >> aux;
 						aux_str = aux;
@@ -989,13 +989,13 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 				}
 				break;
 			case 5:
-				clear();
+				system("CLS");
 				while (true)
 				{
 					while (true)
 					{
 						if (highlight > 5)
-							clear();
+							system("CLS");
 						cout << "Digite novo tipo de evento: ";
 						cin >> aux;
 						aux_str = aux;
@@ -1023,13 +1023,13 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 				}
 				break;
 			case 6:
-				clear();
+				system("CLS");
 				while (true)
 				{
 					while (true)
 					{
 						if (highlight > 5)
-							clear();
+							system("CLS");
 						cout << "Digite nova faixa etaria do evento: ";
 						cin >> aux;
 						aux_str = aux;
@@ -1059,15 +1059,16 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 			default:
 				break;
 			}
+			break;
 		case 3:
-			clear();
+			system("CLS");
 			highlight = 0;
 			while (true)
 			{
 				while (true)
 				{
 					if (highlight > 5)
-						clear();
+						system("CLS");
 					cout << "Digite o codigo do evento que deseja exlcuir: ";
 					cin >> aux;
 					aux_str = aux;
@@ -1105,7 +1106,7 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 			while (true)
 			{
 				if (highlight > 5)
-					clear();
+					system("CLS");
 				cout << endl << "Digite o codigo do evento: ";
 				cin >> aux;
 				aux_str = aux;
@@ -1135,12 +1136,11 @@ void ControladoraApresentacaoEventos::executar(CPF cpf) throw(invalid_argument) 
 			{
 				cout << endl << exp.what() << endl;
 			}
-			int i = 0;
 			for (auto it = resultado.begin(); it != resultado.end(); it++) {
-				if (i == 0) {
+				if (index == 0) {
 					cout << endl << "Total de vendas: " << resultado.front().getValorColuna() << endl;
 					resultado.pop_front();
-					i++;
+					index++;
 				}
 				else{
 					cout << resultado.front().getNomeColuna() << " : " << resultado.front().getValorColuna();
@@ -1202,7 +1202,7 @@ void ControladoraApresentacaoVendas::executar() throw(invalid_argument) {
 		
 		try
 		{
-			apresentacoes = CtrSerEve.apresentacao(evento);
+			apresentacoes = CtrSerEve.apresentacoes(evento);
 		}
 		catch (ErroBanco exp)
 		{

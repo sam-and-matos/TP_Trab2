@@ -1,0 +1,67 @@
+# depslib dependency file v1.0
+1561503322 source:d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\controladoras.cpp
+	"controladoras.h"
+	<iostream>
+
+1561502688 d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\controladoras.h
+	"interfaces.h"
+	"dominios.h"
+	"sqlite3.h"
+	<list>
+
+1561502688 d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\interfaces.h
+	"entidades.h"
+	"dominios.h"
+	<list>
+	"curses.h"
+
+1561058295 d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\entidades.h
+	"dominios.h"
+
+1561058135 d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\dominios.h
+	<stdexcept>
+	<string>
+	<array>
+	<regex>
+
+1559914876 d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\curses.h
+	<stdarg.h>
+	<stddef.h>
+	<stdio.h>
+	<wchar.h>
+
+1134992270 d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\sqlite3.h
+	<stdarg.h>
+
+1561424433 source:d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\dominios.cpp
+	"dominios.h"
+	<algorithm>
+	<ctime>
+	<cctype>
+	<vector>
+
+1554940934 source:d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\entidades.cpp
+	"entidades.h"
+
+1561068051 source:d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\interfaces.cpp
+	"interfaces.h"
+
+1556633285 source:d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\testes.cpp
+	"testes.h"
+	"dominios.h"
+	"entidades.h"
+	<iostream>
+	<stdlib.h>
+
+1556632920 d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\testes.h
+	"dominios.h"
+	<iostream>
+	<string>
+
+1561505201 source:d:\backup\backup-2019\unb\tecnicas de programação 1\trabalho\trab2\trab2\trab2\tp1_trabalho2_17_0155943\main.cpp
+	<iostream>
+	"dominios.h"
+	"entidades.h"
+	"controladoras.h"
+	<vector>
+

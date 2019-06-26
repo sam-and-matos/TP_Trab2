@@ -2,31 +2,30 @@
 #include "dominios.h"
 #include "entidades.h"
 #include "controladoras.h"
-#include "curses.h"
+#include <stdlib.h>
 #include <vector>
 
 using namespace std;
 
 int main(){
-	int choice,linha, coluna, menuLinha, menuColuna, tam_string, posMenu, proxMenu, highlight = 0;
+	int choice, highlight = 0;
 	vector<string> choices= { "Pesquisar Evento","Cadastrar", "Entrar" };
 	ControladoraApresentacaoEventos CtrApreEve;
 	ControladoraApresentacaoAutenticacao CtrApreAut;
-	ControladoraApresentacaoUsuarios CtrApreUsu;
+	ControladoraApresentacaoUsuario CtrApreUsu;
 	ControladoraApresentacaoVendas CtrApreVen;
+	bool teste;
+	
 	CPF cpf;
 	Senha senha;
 	string aux;
 
-	initscr();
-	noecho();
-
-	for(auto it = choices.begin(); it != choices.end(); i++){
+	for(auto it = choices.begin(); it != choices.end(); it++){
 		cout << "Escolha uma das opcoes a seguir:" << endl;
 		cout << "(%d)" << (highlight + 1) << choices.at(highlight);
 		highlight++;
 	}
-	cin << choice;
+	cin >> choice;
 
 	switch(choice)
 	{
@@ -65,11 +64,28 @@ int main(){
 			}
 			break;
 		}
+		try
+		{
+			teste = CtrApreAut.autenticar(cpf, senha);
+		}
+		catch (ErroBanco exp)
+		{
+			cout << endl << exp.what() << endl;
+		}
+		if (teste) {
+			try
+			{
+				CtrApreUsu.executar(cpf, senha);
+			}
+			catch (ErroBanco exp)
+			{
+				cout << endl << exp.what() << endl;
+			}
+		}
 		break;
 	default:
 		break;
 	}
 
-	endwin();
 	return 0;
 }
